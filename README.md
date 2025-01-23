@@ -26,7 +26,7 @@ Here’s a quick breakdown of the main files in this project:
 - HTML5
 - CSS3
 - JavaScript (for any dynamic elements)
-- [Other technologies you used]
+- Bootstrap
 
 ## 🚀 How to Run the Website Locally
 
