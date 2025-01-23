@@ -2,7 +2,7 @@
 
 Hello there! 👋
 
-Thanks for checking out my repository. This is the source code for my professional website, where I showcase my resume, skills, and experience. Whether you’re here to learn more about me, explore my work, or just browse, I’m glad you stopped by. [irving.cyberkineticengineering.com]
+Thanks for checking out my repository. This is the source code for my professional website, where I showcase my resume, skills, and experience. Whether you’re here to learn more about me, explore my work, or just browse, I’m glad you stopped by. [https://irving.cyberkineticengineering.com]
 
 ## 🚀 About Me
 
