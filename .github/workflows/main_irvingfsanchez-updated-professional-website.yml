@@ -61,7 +61,7 @@ jobs:
         with:
           app-name: 'IrvingFSanchez-Updated-Professional-Website'
           slot-name: 'Production'
-          package: ""
+          package: .
         continue-on-error: true
         env:
           DEBUG: '*' 
