@@ -1,0 +1,490 @@
+@import url("https://unpkg.com/normalize.css") layer(normalize);
+
+@layer normalize, base, demo, scroll;
+
+@layer popover {
+    :root {
+        --bottom: 2rem;
+        --speed: 0.3s;
+        --trigger-width: 190px;
+        --trigger-height: 44px;
+        --ease: linear(0 0%, 1 100%)
+    }
+
+    :root:has(:popover-open) {
+        --ease: var(--power-out)
+    }
+
+    .trigger {
+        border: 0;
+        border-radius: 22px;
+        color: light-dark(canvas, canvasText);
+        height: var(--trigger-height);
+        outline-color: #fff;
+        width: var(--trigger-width)
+    }
+
+    :root:has(.trigger:focus-visible) [popover] {
+        outline: 2px solid #fff
+    }
+
+    .contents,
+    .trigger {
+        background: light-dark(#141414, #4d4d4d)
+    }
+
+    .contents {
+        border-radius: 22px;
+        display: flex;
+        flex-direction: column-reverse;
+        height: 100%;
+        padding: 1rem;
+        transition: padding var(--speed);
+        width: 100%
+    }
+
+    [popover] {
+        background: transparent;
+        border: 0;
+        border-radius: 22px;
+        overflow: visible;
+        padding-block: 0
+    }
+
+    [popover] .trigger__details {
+        flex-basis: 44px;
+        min-height: 44px
+    }
+
+    .trigger__details {
+        align-items: center;
+        display: flex;
+        gap: .5rem;
+        padding-left: .5rem;
+        padding-right: .25rem;
+        width: 100%
+    }
+
+    .trigger__details svg {
+        width: 24px
+    }
+
+    .trigger__details .lines {
+        animation: draw linear both;
+        animation-timeline: --content
+    }
+
+    .trigger__details>span:first-of-type {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        gap: .25rem;
+        text-align: left;
+
+        svg {
+            width: 18px
+        }
+    }
+
+    @keyframes draw {
+        to {
+            stroke-dashoffset: 0
+        }
+    }
+
+    [popovertargetaction] {
+        anchor-name: --opener
+    }
+
+    [popover]:popover-open {
+        display: flex
+    }
+
+    [popover]:popover-open .contents {
+        padding: 1rem
+    }
+
+    [popover] {
+        flex-direction: column;
+        position-anchor: --opener;
+        color: #fff;
+        inset: unset;
+        bottom: var(--bottom);
+        height: var(--trigger-height);
+        margin: unset;
+        padding: 0;
+        transition-behavior: allow-discrete;
+        transition-duration: var(--speed);
+        transition-property: display, overlay, width, height;
+        transition-timing-function: var(--ease);
+        width: var(--trigger-width);
+        z-index: 99999999
+    }
+
+    [popover] ol {
+        display: flex;
+        filter: blur(4px);
+        flex-direction: column;
+        list-style-type: decimal-leading-zero;
+        margin: 0;
+        opacity: 0;
+        padding-inline-start: 2.5rem;
+        transition: filter var(--speed), opacity var(--speed)
+    }
+
+    [popover]:popover-open ol {
+        filter: blur(0);
+        opacity: 1
+    }
+
+    @starting-style {
+        [popover]:popover-open ol {
+            filter: blur(4px);
+            opacity: 0
+        }
+    }
+
+    [popover]:popover-open {
+        height: var(--content-height, fit-content);
+        width: var(--content-width, fit-content)
+    }
+
+    li::marker {
+        color: #c2c2c2
+    }
+
+    ol li a {
+        color: #c2c2c2;
+        display: inline-block;
+        padding-block: .5rem;
+        text-decoration: none;
+        white-space: nowrap
+    }
+
+    @starting-style {
+        [popover]:popover-open {
+            height: var(--trigger-height);
+            width: var(--trigger-width)
+        }
+    }
+
+    [popover]::backdrop {
+        backdrop-filter: blur(4px);
+        background: rgb(0 0 0 / 5.5%);
+        opacity: 0;
+        transition-behavior: allow-discrete;
+        transition-duration: var(--speed);
+        transition-property: overlay, display, opacity;
+        transition-timing-function: var(--ease)
+    }
+
+    [popover] button {
+        background: #0000;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 0
+    }
+
+    [popover]:popover-open::backdrop {
+        opacity: 1
+    }
+
+    @starting-style {
+        [popover]:popover-open::backdrop {
+            opacity: 0
+        }
+    }
+}
+
+@layer scroll {
+    :root {
+        --progress-color-light: #595959;
+        --progress-color-dark: #000
+    }
+
+    @property --progress {
+        initial-value: 0;
+        syntax: "<integer>";
+        inherits: true
+    }
+
+    .trigger {
+        anchor-name: --opener;
+        bottom: var(--bottom);
+        position: fixed;
+        z-index: 9999999;
+        view-transition-name: trigger;
+        cursor: pointer
+    }
+
+    :root {
+        animation: scroll-progress linear both;
+        animation-timeline: --content
+    }
+
+    .content {
+        scroll-timeline: --content
+    }
+
+    @keyframes scroll-progress {
+        to {
+            --progress: 100
+        }
+    }
+
+    :root {
+        counter-reset: progress var(--progress)
+    }
+
+    .progress {
+        background-color: light-dark(var(--progress-color-light), var(--progress-color-dark));
+        border-radius: 100px;
+        padding: .25rem .5rem
+    }
+
+    .progress::before {
+        content: counter(progress) "%";
+        font-variant-numeric: tabular-nums
+    }
+}
+
+@layer demo {
+    body {
+        display: grid;
+        height: 100svh;
+        overflow-y: auto;
+        place-items: center
+    }
+
+    @counter-style pad-it {
+        system: extends decimal;
+        pad: 2 "0"
+    }
+
+    .content {
+        height: 100svh;
+        mask: linear-gradient(#0000, #fff 80px calc(100% - 80px), #0000);
+        overflow: auto;
+        padding-block: 80px;
+        width: 100vw;
+
+        @media (width <=680px) {
+            mask: linear-gradient(#0000 60px, #fff 80px calc(100% - 80px), #0000)
+        }
+
+        scrollbar-color:#c00 #0000;
+        scrollbar-width:thin
+    }
+
+    body {
+        --font-level: 0
+    }
+
+    h1 {
+        --font-level: 3;
+
+        line-height: 1;
+        margin: 0 0 2rem;
+        text-wrap: balance;
+
+        span {
+            font-size: .35em
+        }
+    }
+
+    header,
+    main {
+        margin: 0 auto;
+        max-width: calc(100vw - 2rem);
+        width: 60ch
+    }
+
+    main {
+        counter-reset: section
+    }
+
+    section {
+        counter-increment: section 1
+    }
+
+    h2::before {
+        content: counter(section, pad-it) ". "
+    }
+
+    header p {
+        font-size: 1.125rem
+    }
+
+    section:not(:last-of-type) {
+        margin-bottom: 6rem
+    }
+
+    section {
+        scroll-margin-top: 80px
+    }
+
+    h2,
+    p {
+        margin: 0
+    }
+
+    h2 {
+        margin-bottom: 1.25rem;
+        text-wrap: balance
+    }
+
+    p:not(:last-of-type) {
+        margin-bottom: 1rem
+    }
+
+    main p {
+        color: color-mix(in hsl, canvasText, canvas 10%);
+        font-weight: 300
+    }
+
+    hr {
+        opacity: .5
+    }
+
+    header,
+    hr,
+    main {
+        margin-bottom: 6rem
+    }
+
+    .heading {
+        display: flex;
+        position: relative;
+
+        a {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            color: inherit;
+            display: grid;
+            opacity: 0;
+            outline-color: transparent;
+            place-items: center;
+            position: absolute;
+            right: calc(100% + .5rem);
+            top: 0;
+            transition: opacity .2s;
+            width: 24px;
+
+            svg {
+                width: 20px
+            }
+        }
+    }
+}
+
+@layer base {
+    :root {
+        --font-size-min: 14;
+        --font-size-max: 16;
+        --font-ratio-min: 1.2;
+        --font-ratio-max: 1.33;
+        --font-width-min: 375;
+        --font-width-max: 1280
+    }
+
+    html {
+        color-scheme: light dark
+    }
+
+    *,
+    ::after,
+    ::before {
+        box-sizing: border-box
+    }
+
+    body {
+        background: light-dark(#fff, #000);
+        display: grid;
+        font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif, system-ui;
+        min-height: 100vh;
+        place-items: center
+    }
+
+    body::before {
+        --size: 45px;
+        --line: color-mix(in lch, canvasText, transparent 70%);
+
+        background: linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% /var(--size) var(--size), linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /var(--size) var(--size);
+        content: "";
+        height: 100vh;
+        mask: linear-gradient(-20deg, transparent 40%, #fff);
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        transform-style: flat;
+        width: 100vw;
+        z-index: -1
+    }
+
+    .sr-only {
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+        clip: rect(0, 0, 0, 0);
+        border-width: 0;
+        white-space: nowrap
+    }
+}
+
+@counter-style pad-example {
+    system: extends decimal;
+    suffix: " ";
+    pad: 2 " "
+}
+
+nav[data-magnetic] {
+    background: #6666668c;
+    border-radius: 20px;
+    left: 50%;
+    position: fixed;
+    top: 10px;
+    transform: translateX(-50%);
+    z-index: 1000
+}
+
+nav ul {
+    color: rgb(255, 255, 255);
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    touch-action: none;
+    transition: color .2s
+}
+
+nav ul li {
+    display: grid;
+    font-weight: 400;
+    place-items: center
+}
+
+nav ul li a {
+    color: inherit;
+    display: inline-block;
+    padding: .5rem 1.25rem;
+    text-decoration: none
+}
+
+ul::after,
+ul::before {
+    content: "";
+    position: absolute;
+    transition: all var(--transition-speed, .2s)
+}
+
+@supports(anchor-name:--a) {
+    ul li a:target {
+        anchor-name: --target
+    }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "profile-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio website",
+  "main": "index.js",
+  "scripts": {
+    "lint:css": "stylelint \"assets/css/**/*.css\"",
+    "build:css": "postcss assets/css/blog.css --output assets/css/blog.min.css"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^6.0.0",
+    "autoprefixer": "^10.4.20",
+    "cssnano": "^7.0.6",
+    "postcss": "^8.4.47",
+    "postcss-cli": "^11.0.0",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard": "^36.0.1"
+  },
+  "keywords": [
+    "portfolio",
+    "CSS",
+    "PostCSS",
+    "Stylelint",
+    "PurgeCSS"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
